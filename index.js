@@ -20,4 +20,9 @@ const url = process.env.URL;
 const user = process.env.USER;
 const target = url + user;
 
-script(puppeteer, session, target, message, sleep);
+(async () => {
+    const data = await script(puppeteer, session, target, message, sleep);
+
+    console.log(data.followers.length);
+    console.log(data.following.length);
+})();
