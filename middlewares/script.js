@@ -73,6 +73,9 @@ export default async function script(puppeteer, session, target, message, sleep)
     message('Closing the following modal...');
     await page.click('button[class="_abl-"]');
 
+    message('Closing the browser...');
+    await browser.close();
+
     return {
         followers,
         following,
