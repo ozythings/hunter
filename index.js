@@ -3,10 +3,11 @@ import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 
 // helpers
-import {message, sleep} from './utils/message.js';
+import {message, sleep, date} from './utils/message.js';
 
 // scripts
 import script from './middlewares/script.js';
+import write from './middlewares/write.js';
 
 // dotenv configuration
 config();
@@ -23,6 +24,5 @@ const target = url + user;
 (async () => {
     const data = await script(puppeteer, session, target, message, sleep);
 
-    console.log(data.followers.length);
-    console.log(data.following.length);
+    await write(data, message, user, date);
 })();
