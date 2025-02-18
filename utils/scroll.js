@@ -1,4 +1,4 @@
-export const scroll = async (page, div) => {
+const scroll = async (page, div) => {
     await page.evaluate(async (div) => {
         let lastScrollTop = -1;
 
@@ -9,3 +9,5 @@ export const scroll = async (page, div) => {
         }
     }, div);
 }
+
+export default scroll;
