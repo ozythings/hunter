@@ -10,4 +10,3 @@ const write = async (data, message) => {
 }
 
 module.exports = write;
-g
