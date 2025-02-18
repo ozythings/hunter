@@ -2,7 +2,7 @@ const classes = ".x1i10hfl.xjbqb8w.x1ejq31n.xd10rxx.x1sy0etr.x17r0tee.x972fbf.xc
 const user_classes = "._ap3a._aaco._aacw._aacx._aad7._aade";
 const div_classes = ".xyi19xy.x1ccrb07.xtf3nb5.x1pc53ja.x1lliihq.x1iyjqo2.xs83m0k.xz65tgg.x1rife3k.x1n2onr6";
 
-import {scroll} from '../utils/scroll.js';
+import scroll from '../utils/scroll.js';
 
 export default async function script(puppeteer, session, target, message, sleep) {
     message('Launching browser...');
@@ -61,7 +61,8 @@ export default async function script(puppeteer, session, target, message, sleep)
     message('Scrolling to the end...');
     const _div = await page.$(div_classes);
 
-    await
+    await scroll(page, _div);
+
     message('Fetching the users...');
     const following = await page.evaluate((user_classes) => {
         const users = document.querySelectorAll(user_classes);
@@ -69,12 +70,11 @@ export default async function script(puppeteer, session, target, message, sleep)
         return Array.from(users).map(user => user.textContent);
     }, user_classes);
 
-
     message('Closing the following modal...');
     await page.click('button[class="_abl-"]');
 
-    console.log(followers);
-    console.log(followers.length)
-    console.log(following);
-    console.log(following.length)
+    return {
+        followers,
+        following,
+    }
 }
