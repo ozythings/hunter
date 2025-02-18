@@ -9,4 +9,4 @@ const write = async (data, message) => {
     await fs.writeFileSync('dist/following.json', JSON.stringify(data.following, null, 4));
 }
 
-module.exports = write;
+export default write;
