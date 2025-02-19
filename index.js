@@ -6,7 +6,7 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import {message, sleep, date} from './utils/message.js';
 
 // scripts
-import script from './middlewares/script.js';
+import browser from './middlewares/browser.js';
 import write from './middlewares/write.js';
 
 // dotenv configuration
@@ -22,7 +22,7 @@ const user = process.env.USER;
 const target = url + user;
 
 (async () => {
-    const data = await script(puppeteer, session, target, message, sleep);
+    const data = await browser(puppeteer, session, target, message, sleep);
 
     await write(data, message, user, date);
 })();
