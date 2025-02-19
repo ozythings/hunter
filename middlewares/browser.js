@@ -4,7 +4,7 @@ const div_classes = ".xyi19xy.x1ccrb07.xtf3nb5.x1pc53ja.x1lliihq.x1iyjqo2.xs83m0
 
 import scroll from '../utils/scroll.js';
 
-export default async function script(puppeteer, session, target, message, sleep) {
+export default async function browser(puppeteer, session, target, message, sleep) {
     message('Launching browser...');
     const browser = await puppeteer.launch({
         headless: true, // invisible browser
