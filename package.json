@@ -3,8 +3,8 @@
   "module": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "bun index.js",
+    "dev": "bun index.js"
   },
   "devDependencies": {
     "@types/bun": "latest"
@@ -15,6 +15,7 @@
   "dependencies": {
     "dotenv": "^16.4.7",
     "fs": "^0.0.1-security",
+    "looks-same": "^9.0.1",
     "nodemon": "^3.1.9",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
