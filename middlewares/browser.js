@@ -3,85 +3,92 @@ const user_classes = "._ap3a._aaco._aacw._aacx._aad7._aade";
 const div_classes = ".xyi19xy.x1ccrb07.xtf3nb5.x1pc53ja.x1lliihq.x1iyjqo2.xs83m0k.xz65tgg.x1rife3k.x1n2onr6";
 
 import scroll from '../utils/scroll.js';
+import scrollPosts from '../utils/scrollPosts.js';
 
 export default async function browser(puppeteer, session, target, message, sleep) {
-    message('Launching browser...');
-    const browser = await puppeteer.launch({
-        headless: true, // invisible browser
-        defaultViewport: null,
-        executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", // your chrome path
-        args: ['--start-maximized', '--window-size=1920,1080', '--no-sandbox', '--disable-setuid-sandbox'],
-    });
+  message('Launching browser...');
+  const browser = await puppeteer.launch({
+    headless: false, // invisible browser
+    defaultViewport: null,
+    executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", // your chrome path
+    args: ['--start-maximized', '--window-size=1920,1080', '--no-sandbox', '--disable-setuid-sandbox'],
+  });
 
-    message('Opening new page...');
-    const page = await browser.newPage();
+  message('Opening new page...');
+  const page = await browser.newPage();
 
-    message('Setting the cookies...');
-    await page.setCookie({
-        name: 'sessionid',
-        value: session,
-        domain: '.instagram.com',
-    });
+  message('Setting the cookies...');
+  await page.setCookie({
+    name: 'sessionid',
+    value: session,
+    domain: '.instagram.com',
+  });
 
-    message('Navigating to the target...');
-    await page.goto(target);
+  message('Navigating to the target...');
+  await page.goto(target);
 
-    message('Waiting for the page to load...');
-    await page.waitForSelector(classes);
+  message('Waiting for the page to load...');
+  await page.waitForSelector(classes);
 
-    message('Getting the image url...');
-    const imgUrl = await page.$eval('img[alt*="profile picture"]', img => img.src);
+  message('Getting the image url...');
+  const imgUrl = await page.$eval('img[alt*="profile picture"]', img => img.src);
 
-    const buttons = await page.$$(classes);
 
-    message('Clicking the followers button...');
-    await buttons[0].click();
 
-    message('Waiting for the modal...');
-    await page.waitForSelector(user_classes);
+  const buttons = await page.$$(classes);
 
-    message('Scrolling to the end...');
-    const div = await page.$(div_classes);
+  message('Clicking the followers button...');
+  await buttons[0].click();
 
-    await scroll(page, div);
+  message('Waiting for the modal...');
+  await page.waitForSelector(user_classes);
 
-    message('Fetching the users...');
-    const followers = await page.evaluate((user_classes) => {
-        const users = document.querySelectorAll(user_classes);
+  message('Scrolling to the end...');
+  const div = await page.$(div_classes);
 
-        return Array.from(users).map(user => user.textContent);
-    }, user_classes);
+  await scroll(page, div);
 
-    message('Closing the followers modal...');
-    await page.click('button[class="_abl-"]');
+  message('Fetching the users...');
+  const followers = await page.evaluate((user_classes) => {
+    const users = document.querySelectorAll(user_classes);
 
-    message('Clicking the following button...');
-    await buttons[1].click();
+    return Array.from(users).map(user => user.textContent);
+  }, user_classes);
 
-    message('Waiting for the modal...');
-    await page.waitForSelector(user_classes);
+  message('Closing the followers modal...');
+  await page.click('button[class="_abl-"]');
 
-    message('Scrolling to the end...');
-    const _div = await page.$(div_classes);
+  message('Clicking the following button...');
+  await buttons[1].click();
 
-    await scroll(page, _div);
+  message('Waiting for the modal...');
+  await page.waitForSelector(user_classes);
 
-    message('Fetching the users...');
-    const following = await page.evaluate((user_classes) => {
-        const users = document.querySelectorAll(user_classes);
+  message('Scrolling to the end...');
+  const _div = await page.$(div_classes);
 
-        return Array.from(users).map(user => user.textContent);
-    }, user_classes);
+  await scroll(page, _div);
 
-    message('Closing the following modal...');
-    await page.click('button[class="_abl-"]');
+  message('Fetching the users...');
+  const following = await page.evaluate((user_classes) => {
+    const users = document.querySelectorAll(user_classes);
 
-    message('Closing the browser...');
-    await browser.close();
+    return Array.from(users).map(user => user.textContent);
+  }, user_classes);
 
-    return {
-        followers,
-        following,
-        imgUrl,
-    }
+  message('Closing the following modal...');
+  await page.click('button[class="_abl-"]');
+  
+  message('Getting the post urls...');
+  const postUrls = await scrollPosts(page, message);
+
+  message('Closing the browser...');
+  await browser.close();
+
+  return {
+    followers,
+    following,
+    imgUrl,
+    postUrls,
+  }
 }
