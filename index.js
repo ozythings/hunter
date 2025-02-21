@@ -2,6 +2,8 @@ import {config} from 'dotenv';
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 
+import saveImage from './middlewares/saveImage.js';
+
 // helpers
 import {message, sleep, date} from './utils/message.js';
 
@@ -23,6 +25,9 @@ const target = url + user;
 
 (async () => {
     const data = await browser(puppeteer, session, target, message, sleep);
+    await saveImage(data, message, user, date);
 
-    await write(data, message, user, date);
+    write(data, message, user, date);
 })();
+
+

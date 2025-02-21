@@ -29,6 +29,9 @@ export default async function browser(puppeteer, session, target, message, sleep
     message('Waiting for the page to load...');
     await page.waitForSelector(classes);
 
+    message('Getting the image url...');
+    const imgUrl = await page.$eval('img[alt*="profile picture"]', img => img.src);
+
     const buttons = await page.$$(classes);
 
     message('Clicking the followers button...');
@@ -79,5 +82,6 @@ export default async function browser(puppeteer, session, target, message, sleep
     return {
         followers,
         following,
+        imgUrl,
     }
 }
